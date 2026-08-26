@@ -8,25 +8,27 @@
   :root {
     --bg-primary: #ffffff;
     --bg-secondary: #f8fafc;
-    --bg-card: #ffffff;
+    --bg-card-rgb: 255 255 255;
     --text-primary: #0f172a;
     --text-secondary: #64748b;
     --text-muted: #94a3b8;
     --border-color: #e2e8f0;
     --accent: #ff6b6b;
     --accent-light: #ffa8a8;
+    --ui-opacity: 0.9;
   }
 
   .dark {
     --bg-primary: #0f1115;
     --bg-secondary: #151921;
-    --bg-card: #1a1e28;
+    --bg-card-rgb: 26 30 40;
     --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
     --border-color: #2a303c;
     --accent: #ff8585;
     --accent-light: #ffb3b3;
+    --ui-opacity: 0.9;
   }
 
   html {
@@ -42,8 +44,8 @@
 
 @layer utilities {
   .glass {
-    @apply bg-opacity-80 backdrop-blur-xl;
-    background-color: var(--bg-card);
+    @apply backdrop-blur-xl;
+    background-color: rgba(var(--bg-card-rgb), var(--ui-opacity, 0.9));
     border: 1px solid var(--border-color);
   }
 

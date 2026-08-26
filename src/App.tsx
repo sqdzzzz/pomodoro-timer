@@ -14,13 +14,16 @@ import { WeeklyChart } from '@/components/WeeklyChart'
 import { SettingsPanel } from '@/components/SettingsPanel'
 
 function App() {
-  const { mode, timeLeft, isRunning, setMode, language } = usePomodoroStore((state) => ({
-    mode: state.mode,
-    timeLeft: state.timeLeft,
-    isRunning: state.isRunning,
-    setMode: state.setMode,
-    language: state.language,
-  }))
+  const { mode, timeLeft, isRunning, setMode, language, uiOpacity } = usePomodoroStore(
+    (state) => ({
+      mode: state.mode,
+      timeLeft: state.timeLeft,
+      isRunning: state.isRunning,
+      setMode: state.setMode,
+      language: state.language,
+      uiOpacity: state.settings.uiOpacity,
+    })
+  )
 
   const t = useTranslation()
 
@@ -33,7 +36,10 @@ function App() {
   }, [language])
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col items-center px-4 py-8 sm:py-12 transition-colors duration-300">
+    <div
+      className="relative min-h-screen w-full flex flex-col items-center px-4 py-8 sm:py-12 transition-colors duration-300"
+      style={{ '--ui-opacity': uiOpacity } as React.CSSProperties}
+    >
       <BackgroundLayer />
       <header className="w-full max-w-md flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">

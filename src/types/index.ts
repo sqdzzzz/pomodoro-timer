@@ -22,6 +22,8 @@ export interface TimerSettings {
   bgmVolume: number // 0-1
   // 提醒音
   alertSound: AlertSoundSource
+  // UI 透明度
+  uiOpacity: number // 0-1
 }
 
 export interface DailyRecord {

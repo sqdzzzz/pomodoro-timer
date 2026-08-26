@@ -54,6 +54,9 @@ export interface TranslationDict {
     alertCustom: string
     uploadAlert: string
     preview: string
+    uiOpacity: string
+    immersiveMode: string
+    resetOpacity: string
   }
   notifications: {
     workDoneTitle: string
@@ -133,6 +136,9 @@ export const translations: Record<Language, TranslationDict> = {
       alertCustom: '自定义',
       uploadAlert: '选择音频',
       preview: '试听',
+      uiOpacity: 'UI 透明度',
+      immersiveMode: '沉浸模式',
+      resetOpacity: '还原',
     },
     notifications: {
       workDoneTitle: '番茄完成！',
@@ -210,6 +216,9 @@ export const translations: Record<Language, TranslationDict> = {
       alertCustom: 'Custom',
       uploadAlert: 'Choose audio',
       preview: 'Preview',
+      uiOpacity: 'UI opacity',
+      immersiveMode: 'Immersive',
+      resetOpacity: 'Reset',
     },
     notifications: {
       workDoneTitle: 'Pomodoro completed!',

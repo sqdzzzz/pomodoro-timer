@@ -277,6 +277,44 @@ export function SettingsPanel() {
             />
           </div>
 
+          {/* 界面透明度 */}
+          <div className="pt-3 border-t border-[var(--border-color)] space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm text-[var(--text-secondary)]">{t.settings.uiOpacity}</label>
+                <span className="text-xs font-medium text-[var(--text-primary)] tabular-nums">
+                  {Math.round(settings.uiOpacity * 100)}%
+                </span>
+              </div>
+              <input
+                type="range"
+                min={0.05}
+                max={1}
+                step={0.05}
+                value={settings.uiOpacity}
+                onChange={(e) => updateSettings({ uiOpacity: Number(e.target.value) })}
+                className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-[var(--border-color)]"
+                style={{ accentColor: '#ff6b6b' }}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => updateSettings({ uiOpacity: 0.3 })}
+                className="px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-gradient-tomato shadow-md shadow-tomato-500/25 hover:opacity-90 transition-opacity"
+              >
+                {t.settings.immersiveMode}
+              </button>
+              <button
+                type="button"
+                onClick={() => updateSettings({ uiOpacity: 1 })}
+                className="px-3 py-1.5 text-xs font-medium rounded-lg text-[var(--text-secondary)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:text-[var(--text-primary)] transition-colors"
+              >
+                {t.settings.resetOpacity}
+              </button>
+            </div>
+          </div>
+
           {/* 背景设置 */}
           <div className="pt-3 border-t border-[var(--border-color)] space-y-3">
             <div className="flex items-center justify-between">

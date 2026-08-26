@@ -21,6 +21,7 @@ const DEFAULT_SETTINGS: TimerSettings = {
   bgmEnabled: false,
   bgmVolume: 0.6,
   alertSound: 'default',
+  uiOpacity: 1,
 }
 
 const MODES: Record<TimerMode, keyof typeof DEFAULT_SETTINGS> = {
