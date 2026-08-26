@@ -45,7 +45,7 @@
 @layer utilities {
   .glass {
     @apply backdrop-blur-xl;
-    background-color: rgba(var(--bg-card-rgb), var(--ui-opacity, 0.9));
+    background-color: rgb(var(--bg-card-rgb) / var(--ui-opacity, 0.9));
     border: 1px solid var(--border-color);
   }
 

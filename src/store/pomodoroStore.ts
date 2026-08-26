@@ -181,6 +181,15 @@ export const usePomodoroStore = create<PomodoroStore>()(
         settings: state.settings,
         language: state.language,
       }),
+      // 深合并 settings：旧版本 localStorage 缺失的新字段（如 uiOpacity）自动回填默认值
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<PomodoroStore>
+        return {
+          ...current,
+          ...p,
+          settings: { ...current.settings, ...p.settings },
+        }
+      },
     }
   )
 )
