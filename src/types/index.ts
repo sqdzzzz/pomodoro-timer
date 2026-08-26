@@ -2,6 +2,8 @@ import type { Language } from '@/i18n'
 
 export type TimerMode = 'work' | 'shortBreak' | 'longBreak'
 
+export type BackgroundType = 'video' | 'image' | 'none'
+
 export interface TimerSettings {
   workMinutes: number
   shortBreakMinutes: number
@@ -11,6 +13,11 @@ export interface TimerSettings {
   autoStartPomodoros: boolean
   soundEnabled: boolean
   notificationEnabled: boolean
+  // 背景与 BGM
+  backgroundType: BackgroundType
+  backgroundVideoVolume: number // 0-1；0 表示静音（muted 自动播放）
+  bgmEnabled: boolean
+  bgmVolume: number // 0-1
 }
 
 export interface DailyRecord {
@@ -27,6 +34,8 @@ export interface PomodoroState {
   records: DailyRecord[]
   settings: TimerSettings
   language: Language
+  /** 自定义文件版本号，上传/删除 IndexedDB 文件后自增，用于刷新 useIndexedFile */
+  filesVersion: number
 }
 
 export interface PomodoroActions {
@@ -38,6 +47,7 @@ export interface PomodoroActions {
   setMode: (mode: TimerMode) => void
   updateSettings: (settings: Partial<TimerSettings>) => void
   setLanguage: (language: Language) => void
+  bumpFilesVersion: () => void
 }
 
 export type PomodoroStore = PomodoroState & PomodoroActions

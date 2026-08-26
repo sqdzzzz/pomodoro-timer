@@ -5,6 +5,7 @@ import { useTimer } from '@/hooks/useTimer'
 import { useTheme } from '@/hooks/useTheme'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { BackgroundLayer } from '@/components/BackgroundLayer'
 import { ModeTabs } from '@/components/ModeTabs'
 import { TimerDisplay } from '@/components/TimerDisplay'
 import { TimerControls } from '@/components/TimerControls'
@@ -32,7 +33,8 @@ function App() {
   }, [language])
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center px-4 py-8 sm:py-12 transition-colors duration-300">
+    <div className="relative min-h-screen w-full flex flex-col items-center px-4 py-8 sm:py-12 transition-colors duration-300">
+      <BackgroundLayer />
       <header className="w-full max-w-md flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-tomato flex items-center justify-center shadow-lg shadow-tomato-500/25">

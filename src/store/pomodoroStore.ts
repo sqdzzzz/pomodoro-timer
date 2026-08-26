@@ -1,12 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { PomodoroStore, TimerMode, DailyRecord } from '@/types'
+import type { PomodoroStore, TimerMode, DailyRecord, TimerSettings } from '@/types'
 import { getToday } from '@/utils/date'
 import { sendNotification } from '@/utils/notification'
 import { playNotificationSound } from '@/utils/audio'
 import { translations } from '@/i18n'
 
-const DEFAULT_SETTINGS = {
+const DEFAULT_SETTINGS: TimerSettings = {
   workMinutes: 25,
   shortBreakMinutes: 5,
   longBreakMinutes: 15,
@@ -15,6 +15,10 @@ const DEFAULT_SETTINGS = {
   autoStartPomodoros: false,
   soundEnabled: true,
   notificationEnabled: true,
+  backgroundType: 'video',
+  backgroundVideoVolume: 0,
+  bgmEnabled: false,
+  bgmVolume: 0.6,
 }
 
 const MODES: Record<TimerMode, keyof typeof DEFAULT_SETTINGS> = {
@@ -46,6 +50,7 @@ export const usePomodoroStore = create<PomodoroStore>()(
       records: [],
       settings: DEFAULT_SETTINGS,
       language: 'zh',
+      filesVersion: 0,
 
       start: () => set({ isRunning: true }),
 
@@ -126,6 +131,8 @@ export const usePomodoroStore = create<PomodoroStore>()(
       },
 
       setLanguage: (language) => set({ language }),
+
+      bumpFilesVersion: () => set((state) => ({ filesVersion: state.filesVersion + 1 })),
 
       updateSettings: (partial) => {
         set((state) => {

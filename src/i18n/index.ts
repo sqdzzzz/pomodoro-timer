@@ -33,6 +33,22 @@ export interface TranslationDict {
     pomodorosUnit: string
     sound: string
     notifications: string
+    background: string
+    backgroundNone: string
+    backgroundImage: string
+    backgroundVideo: string
+    backgroundVideoVolume: string
+    videoVolumeHint: string
+    uploadImage: string
+    uploadVideo: string
+    uploadBgm: string
+    removeFile: string
+    customVideo: string
+    customImage: string
+    defaultBgm: string
+    customBgm: string
+    bgm: string
+    bgmVolume: string
   }
   notifications: {
     workDoneTitle: string
@@ -91,6 +107,22 @@ export const translations: Record<Language, TranslationDict> = {
       pomodorosUnit: '个番茄',
       sound: '提示音',
       notifications: '桌面通知',
+      background: '背景',
+      backgroundNone: '无',
+      backgroundImage: '图片',
+      backgroundVideo: '视频',
+      backgroundVideoVolume: '背景视频音量',
+      videoVolumeHint: '调节音量即可开启背景视频的声音（浏览器要求先静音自动播放）',
+      uploadImage: '选择图片',
+      uploadVideo: '选择视频',
+      uploadBgm: '选择音乐',
+      removeFile: '移除',
+      customVideo: '自定义视频',
+      customImage: '自定义图片',
+      defaultBgm: '默认音乐',
+      customBgm: '自定义音乐',
+      bgm: '背景音乐',
+      bgmVolume: 'BGM 音量',
     },
     notifications: {
       workDoneTitle: '番茄完成！',
@@ -147,6 +179,22 @@ export const translations: Record<Language, TranslationDict> = {
       pomodorosUnit: 'pomodoros',
       sound: 'Sound',
       notifications: 'Notifications',
+      background: 'Background',
+      backgroundNone: 'None',
+      backgroundImage: 'Image',
+      backgroundVideo: 'Video',
+      backgroundVideoVolume: 'Video volume',
+      videoVolumeHint: 'Adjust the volume to enable background video sound (muted autoplay is required by browsers)',
+      uploadImage: 'Choose image',
+      uploadVideo: 'Choose video',
+      uploadBgm: 'Choose music',
+      removeFile: 'Remove',
+      customVideo: 'Custom video',
+      customImage: 'Custom image',
+      defaultBgm: 'Default music',
+      customBgm: 'Custom music',
+      bgm: 'Background music',
+      bgmVolume: 'BGM volume',
     },
     notifications: {
       workDoneTitle: 'Pomodoro completed!',
