@@ -1,0 +1,120 @@
+import { useState } from 'react'
+import { usePomodoroStore } from '@/store/pomodoroStore'
+import { requestNotificationPermission } from '@/utils/notification'
+import type { TimerSettings } from '@/types'
+
+const SETTING_GROUPS: {
+  key: keyof TimerSettings
+  label: string
+  min: number
+  max: number
+  step: number
+  unit: string
+}[] = [
+  { key: 'workMinutes', label: 'Focus length', min: 1, max: 60, step: 1, unit: 'min' },
+  { key: 'shortBreakMinutes', label: 'Short break', min: 1, max: 30, step: 1, unit: 'min' },
+  { key: 'longBreakMinutes', label: 'Long break', min: 1, max: 60, step: 1, unit: 'min' },
+  { key: 'longBreakInterval', label: 'Long break interval', min: 1, max: 10, step: 1, unit: 'pomodoros' },
+]
+
+export function SettingsPanel() {
+  const { settings, updateSettings } = usePomodoroStore((state) => ({
+    settings: state.settings,
+    updateSettings: state.updateSettings,
+  }))
+
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleToggleNotifications = async () => {
+    if (!settings.notificationEnabled) {
+      const permission = await requestNotificationPermission()
+      updateSettings({ notificationEnabled: permission === 'granted' })
+    } else {
+      updateSettings({ notificationEnabled: false })
+    }
+  }
+
+  return (
+    <div className="w-full">
+      <button
+        onClick={() => setIsOpen((v) => !v)}
+        className="flex items-center justify-between w-full p-4 rounded-2xl glass transition-colors duration-200 hover:bg-[var(--bg-secondary)]"
+      >
+        <div className="flex items-center gap-3">
+          <svg className="w-5 h-5 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span className="text-sm font-medium text-[var(--text-primary)]">Settings</span>
+        </div>
+        <svg
+          className={`w-5 h-5 text-[var(--text-muted)] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="mt-3 p-5 rounded-2xl glass space-y-5 animate-in fade-in slide-in-from-top-2 duration-200">
+          {SETTING_GROUPS.map((group) => (
+            <div key={group.key}>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm text-[var(--text-secondary)]">{group.label}</label>
+                <span className="text-xs font-medium text-[var(--text-primary)] tabular-nums">
+                  {settings[group.key]} {group.unit}
+                </span>
+              </div>
+              <input
+                type="range"
+                min={group.min}
+                max={group.max}
+                step={group.step}
+                value={settings[group.key] as number}
+                onChange={(e) =>
+                  updateSettings({ [group.key]: Number(e.target.value) } as Partial<TimerSettings>)
+                }
+                className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-[var(--border-color)] accent-tomato-500"
+                style={{ accentColor: '#ff6b6b' }}
+              />
+            </div>
+          ))}
+
+          <div className="flex items-center justify-between pt-2">
+            <span className="text-sm text-[var(--text-secondary)]">Sound</span>
+            <button
+              onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
+                settings.soundEnabled ? 'bg-tomato-500' : 'bg-slate-300 dark:bg-slate-600'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
+                  settings.soundEnabled ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-[var(--text-secondary)]">Notifications</span>
+            <button
+              onClick={handleToggleNotifications}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
+                settings.notificationEnabled ? 'bg-tomato-500' : 'bg-slate-300 dark:bg-slate-600'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
+                  settings.notificationEnabled ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
