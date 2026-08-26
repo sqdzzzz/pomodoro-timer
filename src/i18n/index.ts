@@ -38,6 +38,8 @@ export interface TranslationDict {
     backgroundImage: string
     backgroundVideo: string
     backgroundVideoVolume: string
+    pauseBackgroundVideo: string
+    playBackgroundVideo: string
     videoVolumeHint: string
     uploadImage: string
     uploadVideo: string
@@ -120,6 +122,8 @@ export const translations: Record<Language, TranslationDict> = {
       backgroundImage: '图片',
       backgroundVideo: '视频',
       backgroundVideoVolume: '背景视频音量',
+      pauseBackgroundVideo: '暂停背景视频',
+      playBackgroundVideo: '播放背景视频',
       videoVolumeHint: '调节音量即可开启背景视频的声音（浏览器要求先静音自动播放）',
       uploadImage: '选择图片',
       uploadVideo: '选择视频',
@@ -200,6 +204,8 @@ export const translations: Record<Language, TranslationDict> = {
       backgroundImage: 'Image',
       backgroundVideo: 'Video',
       backgroundVideoVolume: 'Video volume',
+      pauseBackgroundVideo: 'Pause background video',
+      playBackgroundVideo: 'Play background video',
       videoVolumeHint: 'Adjust the volume to enable background video sound (muted autoplay is required by browsers)',
       uploadImage: 'Choose image',
       uploadVideo: 'Choose video',

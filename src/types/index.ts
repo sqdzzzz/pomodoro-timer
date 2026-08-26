@@ -18,6 +18,7 @@ export interface TimerSettings {
   // 背景与 BGM
   backgroundType: BackgroundType
   backgroundVideoVolume: number // 0-1；0 表示静音（muted 自动播放）
+  backgroundVideoPaused: boolean // 暂停背景视频播放
   bgmEnabled: boolean
   bgmVolume: number // 0-1
   // 提醒音

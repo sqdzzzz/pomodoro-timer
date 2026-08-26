@@ -344,6 +344,17 @@ export function SettingsPanel() {
                   value={settings.backgroundVideoVolume}
                   onChange={(v) => updateSettings({ backgroundVideoVolume: v })}
                 />
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-[var(--text-secondary)]">
+                    {t.settings.pauseBackgroundVideo}
+                  </span>
+                  <Toggle
+                    checked={settings.backgroundVideoPaused}
+                    onChange={() =>
+                      updateSettings({ backgroundVideoPaused: !settings.backgroundVideoPaused })
+                    }
+                  />
+                </div>
                 <FilePicker
                   accept="video/*"
                   pickLabel={t.settings.uploadVideo}

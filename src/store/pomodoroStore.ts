@@ -18,6 +18,7 @@ const DEFAULT_SETTINGS: TimerSettings = {
   notificationEnabled: true,
   backgroundType: 'video',
   backgroundVideoVolume: 0,
+  backgroundVideoPaused: false,
   bgmEnabled: false,
   bgmVolume: 0.6,
   alertSound: 'default',
