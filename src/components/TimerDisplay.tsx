@@ -1,4 +1,5 @@
 import { usePomodoroStore } from '@/store/pomodoroStore'
+import { useTranslation } from '@/hooks/useTranslation'
 import { formatTime } from '@/utils/formatTime'
 
 export function TimerDisplay() {
@@ -7,6 +8,7 @@ export function TimerDisplay() {
     mode: state.mode,
     settings: state.settings,
   }))
+  const t = useTranslation()
 
   const totalSeconds =
     mode === 'work'
@@ -56,7 +58,7 @@ export function TimerDisplay() {
           {formatTime(timeLeft)}
         </span>
         <span className="mt-2 text-sm font-medium text-[var(--text-secondary)] uppercase tracking-widest">
-          {mode === 'work' ? 'Focus Time' : mode === 'shortBreak' ? 'Short Break' : 'Long Break'}
+          {t.timerLabels[mode]}
         </span>
       </div>
     </div>

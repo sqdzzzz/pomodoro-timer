@@ -1,17 +1,20 @@
 import type { TimerMode } from '@/types'
+import { useTranslation } from '@/hooks/useTranslation'
 
 interface ModeTabsProps {
   mode: TimerMode
   onChange: (mode: TimerMode) => void
 }
 
-const MODES: { value: TimerMode; label: string }[] = [
-  { value: 'work', label: 'Focus' },
-  { value: 'shortBreak', label: 'Short Break' },
-  { value: 'longBreak', label: 'Long Break' },
-]
-
 export function ModeTabs({ mode, onChange }: ModeTabsProps) {
+  const t = useTranslation()
+
+  const MODES: { value: TimerMode; label: string }[] = [
+    { value: 'work', label: t.modes.work },
+    { value: 'shortBreak', label: t.modes.shortBreak },
+    { value: 'longBreak', label: t.modes.longBreak },
+  ]
+
   return (
     <div className="inline-flex p-1 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)]">
       {MODES.map((m) => (

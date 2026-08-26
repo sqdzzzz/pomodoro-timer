@@ -1,9 +1,15 @@
 import { useEffect } from 'react'
+import { useTranslation } from '@/hooks/useTranslation'
 import { formatTime } from '@/utils/formatTime'
+import type { TimerMode } from '@/types'
 
-export function useDocumentTitle(timeLeft: number, mode: string, isRunning: boolean): void {
+export function useDocumentTitle(timeLeft: number, mode: TimerMode, isRunning: boolean): void {
+  const t = useTranslation()
+
   useEffect(() => {
-    const modeLabel = mode === 'work' ? 'Focus' : mode === 'shortBreak' ? 'Short Break' : 'Long Break'
-    document.title = `${formatTime(timeLeft)} · ${modeLabel}${isRunning ? '' : ' (paused)'}`
-  }, [timeLeft, mode, isRunning])
+    const modeLabel = t.timerLabels[mode]
+    document.title = isRunning
+      ? `${formatTime(timeLeft)} · ${modeLabel}`
+      : `${formatTime(timeLeft)} · ${modeLabel} (${t.documentTitle.paused})`
+  }, [timeLeft, mode, isRunning, t])
 }

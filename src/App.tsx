@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { usePomodoroStore } from '@/store/pomodoroStore'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useTimer } from '@/hooks/useTimer'
 import { useTheme } from '@/hooks/useTheme'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
@@ -11,16 +13,23 @@ import { WeeklyChart } from '@/components/WeeklyChart'
 import { SettingsPanel } from '@/components/SettingsPanel'
 
 function App() {
-  const { mode, timeLeft, isRunning, setMode } = usePomodoroStore((state) => ({
+  const { mode, timeLeft, isRunning, setMode, language } = usePomodoroStore((state) => ({
     mode: state.mode,
     timeLeft: state.timeLeft,
     isRunning: state.isRunning,
     setMode: state.setMode,
+    language: state.language,
   }))
+
+  const t = useTranslation()
 
   useTimer()
   useDocumentTitle(timeLeft, mode, isRunning)
   const [theme, toggleTheme] = useTheme()
+
+  useEffect(() => {
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en'
+  }, [language])
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center px-4 py-8 sm:py-12 transition-colors duration-300">
@@ -32,7 +41,7 @@ function App() {
             </svg>
           </div>
           <h1 className="text-xl font-bold tracking-tight text-[var(--text-primary)]">
-            Pomodoro
+            {t.appName}
           </h1>
         </div>
         <ThemeToggle theme={theme} toggle={toggleTheme} />
@@ -51,7 +60,7 @@ function App() {
       </main>
 
       <footer className="mt-12 text-xs text-[var(--text-muted)]">
-        Focus, rest, repeat.
+        {t.footer}
       </footer>
     </div>
   )

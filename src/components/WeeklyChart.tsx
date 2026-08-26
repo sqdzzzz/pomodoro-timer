@@ -1,14 +1,19 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { usePomodoroStore } from '@/store/pomodoroStore'
+import { useTranslation } from '@/hooks/useTranslation'
 import { getLast7Days, getWeekdayLabel } from '@/utils/date'
 
 export function WeeklyChart() {
-  const records = usePomodoroStore((state) => state.records)
+  const { records, language } = usePomodoroStore((state) => ({
+    records: state.records,
+    language: state.language,
+  }))
+  const t = useTranslation()
 
   const days = getLast7Days()
   const data = days.map((date) => ({
     date,
-    label: getWeekdayLabel(date),
+    label: getWeekdayLabel(date, language),
     count: records.find((r) => r.date === date)?.count ?? 0,
   }))
 
@@ -17,8 +22,8 @@ export function WeeklyChart() {
   return (
     <div className="glass rounded-2xl p-5 w-full">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-[var(--text-primary)]">Last 7 Days</h3>
-        <span className="text-xs text-[var(--text-muted)]">pomodoros</span>
+        <h3 className="text-sm font-semibold text-[var(--text-primary)]">{t.chart.last7Days}</h3>
+        <span className="text-xs text-[var(--text-muted)]">{t.chart.pomodoros}</span>
       </div>
 
       <div className="h-40 w-full">

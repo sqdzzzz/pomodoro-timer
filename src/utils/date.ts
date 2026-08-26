@@ -1,3 +1,6 @@
+import type { Language } from '@/i18n'
+import { translations } from '@/i18n'
+
 export function getToday(): string {
   return new Date().toISOString().split('T')[0]
 }
@@ -13,8 +16,7 @@ export function getLast7Days(): string[] {
   return days
 }
 
-export function getWeekdayLabel(dateStr: string): string {
+export function getWeekdayLabel(dateStr: string, language: Language = 'zh'): string {
   const date = new Date(dateStr)
-  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  return weekdays[date.getDay()]
+  return translations[language].weekdays[date.getDay()]
 }

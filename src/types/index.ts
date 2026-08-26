@@ -1,3 +1,5 @@
+import type { Language } from '@/i18n'
+
 export type TimerMode = 'work' | 'shortBreak' | 'longBreak'
 
 export interface TimerSettings {
@@ -24,6 +26,7 @@ export interface PomodoroState {
   todayCompleted: number
   records: DailyRecord[]
   settings: TimerSettings
+  language: Language
 }
 
 export interface PomodoroActions {
@@ -34,6 +37,7 @@ export interface PomodoroActions {
   complete: () => void
   setMode: (mode: TimerMode) => void
   updateSettings: (settings: Partial<TimerSettings>) => void
+  setLanguage: (language: Language) => void
 }
 
 export type PomodoroStore = PomodoroState & PomodoroActions

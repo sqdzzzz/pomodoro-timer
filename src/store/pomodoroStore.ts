@@ -4,6 +4,7 @@ import type { PomodoroStore, TimerMode, DailyRecord } from '@/types'
 import { getToday } from '@/utils/date'
 import { sendNotification } from '@/utils/notification'
 import { playNotificationSound } from '@/utils/audio'
+import { translations } from '@/i18n'
 
 const DEFAULT_SETTINGS = {
   workMinutes: 25,
@@ -44,6 +45,7 @@ export const usePomodoroStore = create<PomodoroStore>()(
       todayCompleted: 0,
       records: [],
       settings: DEFAULT_SETTINGS,
+      language: 'zh',
 
       start: () => set({ isRunning: true }),
 
@@ -63,7 +65,8 @@ export const usePomodoroStore = create<PomodoroStore>()(
 
       complete: () => {
         const state = get()
-        const { settings, mode, completedPomodoros, todayCompleted, records } = state
+        const { settings, mode, completedPomodoros, todayCompleted, records, language } = state
+        const t = translations[language].notifications
 
         let nextMode: TimerMode
         let newCompleted = completedPomodoros
@@ -89,20 +92,15 @@ export const usePomodoroStore = create<PomodoroStore>()(
           if (settings.soundEnabled) playNotificationSound()
           if (settings.notificationEnabled) {
             sendNotification(
-              'Pomodoro completed!',
-              nextMode === 'longBreak'
-                ? 'Great job! Take a long break.'
-                : 'Take a short break.'
+              t.workDoneTitle,
+              nextMode === 'longBreak' ? t.longBreakBody : t.shortBreakBody
             )
           }
         } else {
           nextMode = 'work'
           if (settings.soundEnabled) playNotificationSound()
           if (settings.notificationEnabled) {
-            sendNotification(
-              'Break is over',
-              'Ready to focus again?'
-            )
+            sendNotification(t.breakOverTitle, t.breakOverBody)
           }
         }
 
@@ -127,6 +125,8 @@ export const usePomodoroStore = create<PomodoroStore>()(
         })
       },
 
+      setLanguage: (language) => set({ language }),
+
       updateSettings: (partial) => {
         set((state) => {
           const newSettings = { ...state.settings, ...partial }
@@ -149,6 +149,7 @@ export const usePomodoroStore = create<PomodoroStore>()(
         todayCompleted: state.todayCompleted,
         records: state.records,
         settings: state.settings,
+        language: state.language,
       }),
     }
   )

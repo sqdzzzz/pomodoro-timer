@@ -1,4 +1,5 @@
 import type { Theme } from '@/hooks/useTheme'
+import { useTranslation } from '@/hooks/useTranslation'
 
 interface ThemeToggleProps {
   theme: Theme
@@ -6,12 +7,14 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ theme, toggle }: ThemeToggleProps) {
+  const t = useTranslation()
+
   return (
     <button
       onClick={toggle}
       className="p-2 rounded-xl transition-all duration-200 hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
-      aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-      title={theme === 'light' ? 'Dark mode' : 'Light mode'}
+      aria-label={theme === 'light' ? t.theme.toDark : t.theme.toLight}
+      title={theme === 'light' ? t.theme.toDark : t.theme.toLight}
     >
       {theme === 'light' ? (
         <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
