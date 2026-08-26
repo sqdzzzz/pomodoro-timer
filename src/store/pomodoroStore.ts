@@ -4,6 +4,7 @@ import type { PomodoroStore, TimerMode, DailyRecord, TimerSettings } from '@/typ
 import { getToday } from '@/utils/date'
 import { sendNotification } from '@/utils/notification'
 import { playNotificationSound } from '@/utils/audio'
+import { getFile, FILE_KEYS } from '@/utils/db'
 import { translations } from '@/i18n'
 
 const DEFAULT_SETTINGS: TimerSettings = {
@@ -19,6 +20,7 @@ const DEFAULT_SETTINGS: TimerSettings = {
   backgroundVideoVolume: 0,
   bgmEnabled: false,
   bgmVolume: 0.6,
+  alertSound: 'default',
 }
 
 const MODES: Record<TimerMode, keyof typeof DEFAULT_SETTINGS> = {
@@ -37,6 +39,26 @@ function getNextMode(
 ): TimerMode {
   const isLongBreak = completed > 0 && completed % settings.longBreakInterval === 0
   return isLongBreak ? 'longBreak' : 'shortBreak'
+}
+
+/** 播放提醒音：自定义模式从 IndexedDB 读取用户音频，否则播放内置提示音 */
+function playAlert(settings: TimerSettings): void {
+  if (!settings.soundEnabled) return
+  if (settings.alertSound === 'custom') {
+    getFile(FILE_KEYS.reminderSound)
+      .then((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob)
+          playNotificationSound(url)
+          window.setTimeout(() => URL.revokeObjectURL(url), 10000)
+        } else {
+          playNotificationSound()
+        }
+      })
+      .catch(() => playNotificationSound())
+    return
+  }
+  playNotificationSound()
 }
 
 export const usePomodoroStore = create<PomodoroStore>()(
@@ -94,7 +116,7 @@ export const usePomodoroStore = create<PomodoroStore>()(
 
           nextMode = getNextMode(newCompleted, settings)
 
-          if (settings.soundEnabled) playNotificationSound()
+          playAlert(settings)
           if (settings.notificationEnabled) {
             sendNotification(
               t.workDoneTitle,
@@ -103,7 +125,7 @@ export const usePomodoroStore = create<PomodoroStore>()(
           }
         } else {
           nextMode = 'work'
-          if (settings.soundEnabled) playNotificationSound()
+          playAlert(settings)
           if (settings.notificationEnabled) {
             sendNotification(t.breakOverTitle, t.breakOverBody)
           }

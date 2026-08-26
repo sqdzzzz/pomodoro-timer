@@ -4,6 +4,8 @@ export type TimerMode = 'work' | 'shortBreak' | 'longBreak'
 
 export type BackgroundType = 'video' | 'image' | 'none'
 
+export type AlertSoundSource = 'default' | 'custom'
+
 export interface TimerSettings {
   workMinutes: number
   shortBreakMinutes: number
@@ -18,6 +20,8 @@ export interface TimerSettings {
   backgroundVideoVolume: number // 0-1；0 表示静音（muted 自动播放）
   bgmEnabled: boolean
   bgmVolume: number // 0-1
+  // 提醒音
+  alertSound: AlertSoundSource
 }
 
 export interface DailyRecord {

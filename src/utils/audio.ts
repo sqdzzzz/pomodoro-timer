@@ -11,7 +11,17 @@ function getAudioContext(): AudioContext | null {
   return audioCtx
 }
 
-export function playNotificationSound(): void {
+/** 播放提醒音；传入 src（自定义音频 objectURL）时播放该音频，否则播放内置提示音 */
+export function playNotificationSound(src?: string | null): void {
+  if (src) {
+    const audio = new Audio(src)
+    audio.volume = 0.8
+    void audio.play().catch(() => {
+      /* 自动播放被拦截时静默忽略 */
+    })
+    return
+  }
+
   const ctx = getAudioContext()
   if (!ctx) return
 

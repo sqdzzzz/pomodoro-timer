@@ -49,6 +49,11 @@ export interface TranslationDict {
     customBgm: string
     bgm: string
     bgmVolume: string
+    alertSound: string
+    alertDefault: string
+    alertCustom: string
+    uploadAlert: string
+    preview: string
   }
   notifications: {
     workDoneTitle: string
@@ -123,6 +128,11 @@ export const translations: Record<Language, TranslationDict> = {
       customBgm: '自定义音乐',
       bgm: '背景音乐',
       bgmVolume: 'BGM 音量',
+      alertSound: '提醒音',
+      alertDefault: '默认',
+      alertCustom: '自定义',
+      uploadAlert: '选择音频',
+      preview: '试听',
     },
     notifications: {
       workDoneTitle: '番茄完成！',
@@ -195,6 +205,11 @@ export const translations: Record<Language, TranslationDict> = {
       customBgm: 'Custom music',
       bgm: 'Background music',
       bgmVolume: 'BGM volume',
+      alertSound: 'Alert sound',
+      alertDefault: 'Default',
+      alertCustom: 'Custom',
+      uploadAlert: 'Choose audio',
+      preview: 'Preview',
     },
     notifications: {
       workDoneTitle: 'Pomodoro completed!',
