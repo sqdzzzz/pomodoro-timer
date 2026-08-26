@@ -18,6 +18,7 @@ A minimalist, modern Pomodoro timer built with **React 18**, **TypeScript**, **V
 - **Weekly chart**: Visualize your last 7 days with Recharts
 - **Persistent data**: All settings and statistics are saved to LocalStorage
 - **Dark mode**: Seamless light/dark theme toggle
+- **i18n**: Chinese by default, switchable to English in Settings (中文 / English)
 - **Responsive design**: Works beautifully on desktop and mobile
 
 ## Tech Stack
@@ -67,7 +68,7 @@ pomodoro-timer/
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/pomodoro-timer.git
+git clone https://github.com/sqdzzzz/pomodoro-timer.git
 cd pomodoro-timer
 
 # Install dependencies
@@ -102,7 +103,7 @@ This project includes a GitHub Actions workflow (`.github/workflows/deploy.yml`)
 1. Push the repository to GitHub
 2. Go to **Settings → Pages**
 3. Set **Source** to "GitHub Actions"
-4. The workflow will deploy to `https://your-username.github.io/pomodoro-timer/`
+4. The workflow will deploy to `https://sqdzzzz.github.io/pomodoro-timer/`
 
 ### Manual Deployment
 
