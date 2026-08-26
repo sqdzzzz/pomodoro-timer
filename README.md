@@ -1,53 +1,53 @@
-# Pomodoro Timer
+# 番茄工作法计时器（Pomodoro Timer）
 
-A minimalist, modern Pomodoro timer built with **React 18**, **TypeScript**, **Vite**, **Tailwind CSS**, **Zustand**, and **Recharts**.
+一个基于 **React 18**、**TypeScript**、**Vite**、**Tailwind CSS**、**Zustand** 和 **Recharts** 打造的极简现代番茄钟。
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/react-18-61DAFB?logo=react)
 ![TypeScript](https://img.shields.io/badge/typescript-5.2-3178C6?logo=typescript)
 ![Vite](https://img.shields.io/badge/vite-5.3-646CFF?logo=vite)
 
-## Features
+## 功能特性
 
-- **Classic Pomodoro workflow**: 25 minutes focus, 5 minutes short break, 15 minutes long break
-- **Auto long break**: Automatically enters a long break after every 4 completed pomodoros
-- **Start / Pause / Reset**: Full control over your timer
-- **Desktop notifications**: Browser Notification API alerts you when a session ends
-- **Sound alerts**: Soft beep using the Web Audio API
-- **Daily statistics**: Track today's completed pomodoros and total progress
-- **Weekly chart**: Visualize your last 7 days with Recharts
-- **Persistent data**: All settings and statistics are saved to LocalStorage
-- **Dark mode**: Seamless light/dark theme toggle
-- **i18n**: Chinese by default, switchable to English in Settings (中文 / English)
-- **Responsive design**: Works beautifully on desktop and mobile
+- **经典番茄工作流**：25 分钟专注、5 分钟短休息、15 分钟长休息
+- **自动长休息**：每完成 4 个番茄钟后自动进入长休息
+- **开始 / 暂停 / 重置**：完全掌控计时器
+- **桌面通知**：计时结束通过浏览器 Notification API 提醒
+- **声音提醒**：使用 Web Audio API 播放柔和提示音
+- **每日统计**：记录今日完成番茄数与总进度
+- **周统计图表**：使用 Recharts 可视化最近 7 天数据
+- **数据持久化**：所有设置与统计数据保存至 LocalStorage
+- **深色模式**：无缝切换浅色 / 深色主题
+- **多语言**：默认中文，可在设置内切换至 English（中文 / English）
+- **响应式设计**：桌面端与移动端均有良好体验
 
-## Tech Stack
+## 技术栈
 
-| Category | Technology |
-|----------|------------|
-| Framework | React 18 |
-| Language | TypeScript |
-| Build Tool | Vite |
-| Styling | Tailwind CSS |
-| State Management | Zustand (with persist middleware) |
-| Charts | Recharts |
-| Icons | Inline SVG |
+| 类别 | 技术 |
+|------|------|
+| 前端框架 | React 18 |
+| 开发语言 | TypeScript |
+| 构建工具 | Vite |
+| 样式方案 | Tailwind CSS |
+| 状态管理 | Zustand（含 persist 持久化中间件） |
+| 图表库 | Recharts |
+| 图标 | 内联 SVG |
 
-## Project Structure
+## 项目结构
 
 ```
 pomodoro-timer/
-├── .github/workflows/   # GitHub Actions for deployment
-├── public/              # Static assets
+├── .github/workflows/   # GitHub Actions 部署工作流
+├── public/              # 静态资源
 ├── src/
-│   ├── components/      # UI components
-│   ├── hooks/           # Custom React hooks
-│   ├── store/           # Zustand state management
-│   ├── types/           # TypeScript types
-│   ├── utils/           # Utility functions
-│   ├── App.tsx          # Root component
-│   ├── index.css        # Global styles
-│   └── main.tsx         # Application entry
+│   ├── components/      # UI 组件
+│   ├── hooks/           # 自定义 React Hooks
+│   ├── store/           # Zustand 状态管理
+│   ├── types/           # TypeScript 类型
+│   ├── utils/           # 工具函数
+│   ├── App.tsx          # 根组件
+│   ├── index.css        # 全局样式
+│   └── main.tsx         # 应用入口
 ├── index.html
 ├── package.json
 ├── tailwind.config.js
@@ -57,93 +57,93 @@ pomodoro-timer/
 └── README.md
 ```
 
-## Getting Started
+## 快速开始
 
-### Prerequisites
+### 环境要求
 
 - Node.js 18+
-- npm, yarn, or pnpm
+- npm、yarn 或 pnpm
 
-### Installation
+### 安装与运行
 
 ```bash
-# Clone the repository
+# 克隆仓库
 git clone https://github.com/sqdzzzz/pomodoro-timer.git
 cd pomodoro-timer
 
-# Install dependencies
+# 安装依赖
 npm install
 
-# Start development server
+# 启动开发服务器
 npm run dev
 ```
 
-Open [http://localhost:5173/pomodoro-timer/](http://localhost:5173/pomodoro-timer/) in your browser.
+在浏览器中打开 [http://localhost:5173/pomodoro-timer/](http://localhost:5173/pomodoro-timer/)。
 
-### Build
+### 构建
 
 ```bash
 npm run build
 ```
 
-The production build will be output to the `dist/` directory.
+生产构建产物将输出到 `dist/` 目录。
 
-### Preview Production Build
+### 预览生产构建
 
 ```bash
 npm run preview
 ```
 
-## Deployment
+## 部署
 
 ### GitHub Pages
 
-This project includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and deploys to GitHub Pages on every push to `main`.
+本项目已包含 GitHub Actions 工作流（`.github/workflows/deploy.yml`），每次 push 到 `main` 分支会自动构建并部署到 GitHub Pages。
 
-1. Push the repository to GitHub
-2. Go to **Settings → Pages**
-3. Set **Source** to "GitHub Actions"
-4. The workflow will deploy to `https://sqdzzzz.github.io/pomodoro-timer/`
+1. 将仓库推送到 GitHub
+2. 进入 **Settings → Pages**
+3. 将 **Source** 设置为 "GitHub Actions"
+4. 工作流将自动部署到 `https://sqdzzzz.github.io/pomodoro-timer/`
 
-### Manual Deployment
+### 手动部署
 
 ```bash
 npm run build
 npm run deploy
 ```
 
-> Note: `npm run deploy` uses `gh-pages` to publish the `dist/` folder.
+> 注意：`npm run deploy` 使用 `gh-pages` 将 `dist/` 目录发布到 GitHub Pages。
 
-## Configuration
+## 配置项
 
-You can customize the timer durations and behavior through the settings panel:
+可通过设置面板自定义计时时长与行为：
 
-- Focus length
-- Short break length
-- Long break length
-- Long break interval
-- Sound on/off
-- Notifications on/off
+- 专注时长
+- 短休息时长
+- 长休息时长
+- 长休息间隔
+- 开启 / 关闭提示音
+- 开启 / 关闭桌面通知
 
-## Browser Support
+## 浏览器支持
 
-- Chrome / Edge (latest)
-- Firefox (latest)
-- Safari (latest)
+- Chrome / Edge（最新版）
+- Firefox（最新版）
+- Safari（最新版）
 
-Desktop notifications require a secure context (HTTPS or localhost).
+桌面通知需要在安全上下文（HTTPS 或 localhost）中运行。
 
-## Screenshots
+## 截图
 
-> Add screenshots here after running the app.
+> 运行应用后可将截图替换到此处。
 
-![Timer Light Mode](./screenshots/light-mode.png)
-![Timer Dark Mode](./screenshots/dark-mode.png)
+![浅色模式](./screenshots/light-mode.png)
+![深色模式](./screenshots/dark-mode.png)
 
-## License
+## 开源协议
 
-This project is licensed under the [MIT License](./LICENSE).
+本项目基于 [MIT License](./LICENSE) 开源。
 
-## Acknowledgements
+## 致谢
 
-Inspired by the [Pomodoro Technique](https://francescocirillo.com/products/the-pomodoro-technique) and the clean design of [Linear](https://linear.app/).
+灵感来源于 [番茄工作法](https://francescocirillo.com/products/the-pomodoro-technique) 与 [Linear](https://linear.app/) 的简洁设计。
