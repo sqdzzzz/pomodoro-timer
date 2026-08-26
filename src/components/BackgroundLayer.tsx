@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePomodoroStore } from '@/store/pomodoroStore'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useIndexedFile } from '@/hooks/useIndexedFile'
@@ -10,7 +10,7 @@ const DEFAULT_BGM = `${import.meta.env.BASE_URL}audio/default-bgm.m4a`
 /**
  * 背景层：默认视频背景 / 自定义图片背景 / 自定义视频背景，以及 BGM 播放。
  * 视频背景默认 muted 自动播放（浏览器自动播放策略），拖动音量条即解除静音。
- * 视频背景可通过右下角悬浮按钮或设置面板暂停。
+ * 视频背景可通过右下角悬浮按钮或设置面板暂停；底部进度条支持点击/拖拽调整进度。
  */
 export function BackgroundLayer() {
   const backgroundType = usePomodoroStore((s) => s.settings.backgroundType)
@@ -32,6 +32,13 @@ export function BackgroundLayer() {
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const bgmRef = useRef<HTMLAudioElement>(null)
+
+  // 进度条：用 ref 直接操作 DOM（rAF 每帧更新，避免整组件重渲染）
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  const fillRef = useRef<HTMLDivElement>(null)
+  const handleRef = useRef<HTMLDivElement>(null)
+  const isDraggingRef = useRef(false)
+  const [isDragging, setIsDragging] = useState(false)
 
   const videoSrc = customVideoUrl || DEFAULT_VIDEO
   const bgmSrc = customBgmUrl || DEFAULT_BGM
@@ -72,6 +79,82 @@ export function BackgroundLayer() {
       a.pause()
     }
   }, [bgmEnabled, bgmVolume, bgmSrc])
+
+  // 进度条同步：rAF 每帧直接写 DOM（比 timeupdate 更流畅、不触发 React 重渲染）
+  useEffect(() => {
+    if (backgroundType !== 'video') return
+    let raf = 0
+    const applyProgress = (ratio: number) => {
+      const clamped = Math.min(1, Math.max(0, ratio))
+      const pct = `${clamped * 100}%`
+      if (fillRef.current) fillRef.current.style.width = pct
+      if (handleRef.current) handleRef.current.style.left = pct
+      progressBarRef.current?.setAttribute('aria-valuenow', String(Math.round(clamped * 100)))
+    }
+    const loop = () => {
+      const v = videoRef.current
+      // 拖拽中由 pointer 事件负责显示，避免与预览进度互相覆盖
+      if (v && v.duration > 0 && !isDraggingRef.current) {
+        applyProgress(v.currentTime / v.duration)
+      }
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(raf)
+  }, [backgroundType, videoSrc])
+
+  /** 根据指针事件在进度条上的横向位置计算 0-1 比例 */
+  const ratioFromPointer = (e: React.PointerEvent): number | null => {
+    const bar = progressBarRef.current
+    if (!bar || bar.getBoundingClientRect().width === 0) return null
+    const rect = bar.getBoundingClientRect()
+    return Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width))
+  }
+
+  const seekTo = (ratio: number) => {
+    const v = videoRef.current
+    if (!v || !v.duration || Number.isNaN(v.duration)) return
+    v.currentTime = ratio * v.duration
+    if (fillRef.current) fillRef.current.style.width = `${ratio * 100}%`
+    if (handleRef.current) handleRef.current.style.left = `${ratio * 100}%`
+  }
+
+  const handleProgressPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const ratio = ratioFromPointer(e)
+    if (ratio === null) return
+    e.currentTarget.setPointerCapture(e.pointerId)
+    isDraggingRef.current = true
+    setIsDragging(true)
+    seekTo(ratio)
+  }
+
+  const handleProgressPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return
+    const ratio = ratioFromPointer(e)
+    if (ratio !== null) seekTo(ratio)
+  }
+
+  const handleProgressPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return
+    isDraggingRef.current = false
+    setIsDragging(false)
+    e.currentTarget.releasePointerCapture?.(e.pointerId)
+  }
+
+  // 键盘微调：←/→ ±5%，Home/End 跳到首尾
+  const handleProgressKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const v = videoRef.current
+    if (!v || !v.duration || Number.isNaN(v.duration)) return
+    const step = v.duration * 0.05
+    let ratio: number | null = null
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') ratio = Math.max(0, v.currentTime - step) / v.duration
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') ratio = Math.min(v.duration, v.currentTime + step) / v.duration
+    else if (e.key === 'Home') ratio = 0
+    else if (e.key === 'End') ratio = 1
+    if (ratio === null) return
+    e.preventDefault()
+    seekTo(ratio)
+  }
 
   if (backgroundType === 'none' && !bgmEnabled) {
     return null
@@ -116,7 +199,7 @@ export function BackgroundLayer() {
           onClick={() => updateSettings({ backgroundVideoPaused: !videoPaused })}
           title={videoPaused ? t.settings.playBackgroundVideo : t.settings.pauseBackgroundVideo}
           aria-label={videoPaused ? t.settings.playBackgroundVideo : t.settings.pauseBackgroundVideo}
-          className="fixed bottom-4 right-4 z-30 w-9 h-9 rounded-full glass flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:scale-110 opacity-60 hover:opacity-100 transition-all duration-200"
+          className="fixed bottom-4 right-4 z-40 w-9 h-9 rounded-full glass flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:scale-110 opacity-60 hover:opacity-100 transition-all duration-200"
         >
           {videoPaused ? (
             // 播放图标（当前已暂停，点击恢复）
@@ -130,6 +213,48 @@ export function BackgroundLayer() {
             </svg>
           )}
         </button>
+      )}
+
+      {/* 背景视频进度条：屏幕底部全宽，悬停/拖拽时视觉增强，支持点击跳转与拖拽 */}
+      {backgroundType === 'video' && (
+        <div
+          ref={progressBarRef}
+          role="slider"
+          tabIndex={0}
+          aria-label={t.settings.backgroundVideoProgress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          title={t.settings.backgroundVideoProgress}
+          onPointerDown={handleProgressPointerDown}
+          onPointerMove={handleProgressPointerMove}
+          onPointerUp={handleProgressPointerUp}
+          onPointerCancel={handleProgressPointerUp}
+          onKeyDown={handleProgressKeyDown}
+          className="group fixed bottom-0 left-0 right-0 z-30 h-6 flex items-end cursor-pointer touch-none"
+        >
+          <div
+            className={`relative w-full rounded-full transition-[height] duration-150 ${
+              isDragging ? 'h-1.5' : 'h-1 group-hover:h-1.5'
+            }`}
+          >
+            {/* 底轨 */}
+            <div className="absolute inset-0 rounded-full bg-white/25" />
+            {/* 已播放 */}
+            <div
+              ref={fillRef}
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-tomato shadow-[0_0_8px_rgba(255,107,107,0.55)]"
+              style={{ width: '0%' }}
+            />
+            {/* 拖拽手柄 */}
+            <div
+              ref={handleRef}
+              className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white shadow-md ring-2 ring-tomato-500/60 transition-opacity ${
+                isDragging ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+              }`}
+              style={{ left: '0%' }}
+            />
+          </div>
+        </div>
       )}
     </>
   )
