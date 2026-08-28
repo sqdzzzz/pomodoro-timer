@@ -40,6 +40,10 @@ export function BackgroundLayer() {
   const isDraggingRef = useRef(false)
   const [isDragging, setIsDragging] = useState(false)
 
+  // 暂停状态镜像到 ref：rAF 循环里读取最新值，避免闭包过期
+  const videoPausedRef = useRef(videoPaused)
+  videoPausedRef.current = videoPaused
+
   const videoSrc = customVideoUrl || DEFAULT_VIDEO
   const bgmSrc = customBgmUrl || DEFAULT_BGM
 
@@ -96,6 +100,10 @@ export function BackgroundLayer() {
       // 拖拽中由 pointer 事件负责显示，避免与预览进度互相覆盖
       if (v && v.duration > 0 && !isDraggingRef.current) {
         applyProgress(v.currentTime / v.duration)
+        // 看门狗：非用户主动暂停却被浏览器置为暂停（如 seek 触发的中断）时自动恢复播放
+        if (!videoPausedRef.current && v.paused && v.readyState >= 2) {
+          v.play().catch(() => {})
+        }
       }
       raf = requestAnimationFrame(loop)
     }
@@ -115,6 +123,8 @@ export function BackgroundLayer() {
     const v = videoRef.current
     if (!v || !v.duration || Number.isNaN(v.duration)) return
     v.currentTime = ratio * v.duration
+    // 修复：seek 之后浏览器可能把视频留在暂停态，非用户暂停时强制恢复播放
+    if (!videoPaused && v.paused) v.play().catch(() => {})
     if (fillRef.current) fillRef.current.style.width = `${ratio * 100}%`
     if (handleRef.current) handleRef.current.style.left = `${ratio * 100}%`
   }
@@ -122,6 +132,7 @@ export function BackgroundLayer() {
   const handleProgressPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const ratio = ratioFromPointer(e)
     if (ratio === null) return
+    e.preventDefault()
     e.currentTarget.setPointerCapture(e.pointerId)
     isDraggingRef.current = true
     setIsDragging(true)
@@ -192,14 +203,14 @@ export function BackgroundLayer() {
         {bgmEnabled && <audio ref={bgmRef} src={bgmSrc} loop preload="auto" />}
       </div>
 
-      {/* 背景视频暂停/恢复悬浮按钮：不随 UI 透明度隐藏，低透明度提示、悬停时清晰 */}
+      {/* 背景视频暂停/恢复悬浮按钮：上移避开底部进度条的点击区（旧位置与进度条拖拽区重叠，拖到右侧会误触暂停） */}
       {backgroundType === 'video' && (
         <button
           type="button"
           onClick={() => updateSettings({ backgroundVideoPaused: !videoPaused })}
           title={videoPaused ? t.settings.playBackgroundVideo : t.settings.pauseBackgroundVideo}
           aria-label={videoPaused ? t.settings.playBackgroundVideo : t.settings.pauseBackgroundVideo}
-          className="fixed bottom-4 right-4 z-40 w-9 h-9 rounded-full glass flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:scale-110 opacity-60 hover:opacity-100 transition-all duration-200"
+          className="fixed bottom-10 right-4 z-40 w-9 h-9 rounded-full glass flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:scale-110 opacity-60 hover:opacity-100 transition-all duration-200"
         >
           {videoPaused ? (
             // 播放图标（当前已暂停，点击恢复）
