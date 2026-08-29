@@ -4,6 +4,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { requestNotificationPermission } from '@/utils/notification'
 import { saveFile, deleteFile, FILE_KEYS, type FileKey } from '@/utils/db'
 import { useIndexedFile } from '@/hooks/useIndexedFile'
+import { playNotificationSound, PRESET_ALERT_SOUNDS } from '@/utils/audio'
 import type { TimerSettings, BackgroundType, AlertSoundSource } from '@/types'
 import type { Language } from '@/i18n'
 
@@ -183,15 +184,28 @@ export function SettingsPanel() {
 
   const ALERT_TYPES: { value: AlertSoundSource; label: string }[] = [
     { value: 'default', label: t.settings.alertDefault },
+    { value: 'nailong', label: t.settings.alertNailong },
+    { value: 'gugugaga', label: t.settings.alertGugugaga },
     { value: 'custom', label: t.settings.alertCustom },
   ]
 
   const previewAlert = () => {
-    if (customAlertUrl) {
-      const audio = new Audio(customAlertUrl)
+    const src = PRESET_ALERT_SOUNDS[settings.alertSound]
+    if (settings.alertSound === 'custom') {
+      if (customAlertUrl) {
+        const audio = new Audio(customAlertUrl)
+        audio.volume = 0.8
+        void audio.play().catch(() => {})
+      }
+      return
+    }
+    if (src) {
+      const audio = new Audio(src)
       audio.volume = 0.8
       void audio.play().catch(() => {})
+      return
     }
+    playNotificationSound()
   }
 
   return (
@@ -420,7 +434,17 @@ export function SettingsPanel() {
           <div className="pt-3 border-t border-[var(--border-color)] space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm text-[var(--text-secondary)]">{t.settings.alertSound}</span>
-              <div className="inline-flex p-1 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)]">
+              <div className="flex items-center gap-2">
+                {settings.alertSound !== 'custom' && (
+                  <button
+                    type="button"
+                    onClick={previewAlert}
+                    className="px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-gradient-tomato shadow-md shadow-tomato-500/25 hover:opacity-90 transition-opacity"
+                  >
+                    {t.settings.preview}
+                  </button>
+                )}
+                <div className="inline-flex p-1 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)]">
                 {ALERT_TYPES.map((type) => (
                   <button
                     key={type.value}
@@ -434,6 +458,7 @@ export function SettingsPanel() {
                     {type.label}
                   </button>
                 ))}
+                </div>
               </div>
             </div>
 

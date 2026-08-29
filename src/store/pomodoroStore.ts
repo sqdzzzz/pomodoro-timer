@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { PomodoroStore, TimerMode, DailyRecord, TimerSettings } from '@/types'
 import { getToday } from '@/utils/date'
 import { sendNotification } from '@/utils/notification'
-import { playNotificationSound } from '@/utils/audio'
+import { playNotificationSound, PRESET_ALERT_SOUNDS } from '@/utils/audio'
 import { getFile, FILE_KEYS } from '@/utils/db'
 import { translations } from '@/i18n'
 
@@ -43,9 +43,14 @@ function getNextMode(
   return isLongBreak ? 'longBreak' : 'shortBreak'
 }
 
-/** 播放提醒音：自定义模式从 IndexedDB 读取用户音频，否则播放内置提示音 */
+/** 播放提醒音：预设梗音效直接播放文件，自定义模式从 IndexedDB 读取用户音频，否则播放内置提示音 */
 function playAlert(settings: TimerSettings): void {
   if (!settings.soundEnabled) return
+  const preset = PRESET_ALERT_SOUNDS[settings.alertSound]
+  if (preset) {
+    playNotificationSound(preset)
+    return
+  }
   if (settings.alertSound === 'custom') {
     getFile(FILE_KEYS.reminderSound)
       .then((blob) => {

@@ -4,7 +4,7 @@ export type TimerMode = 'work' | 'shortBreak' | 'longBreak'
 
 export type BackgroundType = 'video' | 'image' | 'none'
 
-export type AlertSoundSource = 'default' | 'custom'
+export type AlertSoundSource = 'default' | 'nailong' | 'gugugaga' | 'custom'
 
 export interface TimerSettings {
   workMinutes: number
