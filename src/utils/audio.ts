@@ -2,8 +2,8 @@ import type { AlertSoundSource } from '@/types'
 
 /** 预设提醒音（网络热梗音效） */
 export const PRESET_ALERT_SOUNDS: Partial<Record<AlertSoundSource, string>> = {
-  nailong: `${import.meta.env.BASE_URL}audio/nailong-laugh.wav`,
-  gugugaga: `${import.meta.env.BASE_URL}audio/gugugaga.mp3`,
+  nailong: `${import.meta.env.BASE_URL}audio/nailong-laugh.mp3`,
+  gugugaga: `${import.meta.env.BASE_URL}audio/gugugaga.m4a`,
 }
 
 let audioCtx: AudioContext | null = null
