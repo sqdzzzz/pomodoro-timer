@@ -23,6 +23,7 @@ export interface TimerSettings {
   bgmVolume: number // 0-1
   // 提醒音
   alertSound: AlertSoundSource
+  alertVolume: number // 0-1
   // UI 透明度
   uiOpacity: number // 0-1
 }

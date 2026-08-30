@@ -19,11 +19,12 @@ function getAudioContext(): AudioContext | null {
   return audioCtx
 }
 
-/** 播放提醒音；传入 src（自定义音频 objectURL）时播放该音频，否则播放内置提示音 */
-export function playNotificationSound(src?: string | null): void {
+/** 播放提醒音；传入 src（自定义音频 objectURL）时播放该音频，否则播放内置提示音；volume 0-1 */
+export function playNotificationSound(src?: string | null, volume = 0.8): void {
+  const v = Math.min(1, Math.max(0, volume))
   if (src) {
     const audio = new Audio(src)
-    audio.volume = 0.8
+    audio.volume = v
     void audio.play().catch(() => {
       /* 自动播放被拦截时静默忽略 */
     })
@@ -44,7 +45,7 @@ export function playNotificationSound(src?: string | null): void {
   oscillator.frequency.setValueAtTime(880, t)
   oscillator.frequency.exponentialRampToValueAtTime(440, t + 0.5)
 
-  gain.gain.setValueAtTime(0.15, t)
+  gain.gain.setValueAtTime(0.15 * v, t)
   gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5)
 
   oscillator.start(t)

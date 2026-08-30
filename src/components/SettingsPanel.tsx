@@ -194,18 +194,18 @@ export function SettingsPanel() {
     if (settings.alertSound === 'custom') {
       if (customAlertUrl) {
         const audio = new Audio(customAlertUrl)
-        audio.volume = 0.8
+        audio.volume = settings.alertVolume
         void audio.play().catch(() => {})
       }
       return
     }
     if (src) {
       const audio = new Audio(src)
-      audio.volume = 0.8
+      audio.volume = settings.alertVolume
       void audio.play().catch(() => {})
       return
     }
-    playNotificationSound()
+    playNotificationSound(undefined, settings.alertVolume)
   }
 
   return (
@@ -461,6 +461,11 @@ export function SettingsPanel() {
                 </div>
               </div>
             </div>
+            <VolumeSlider
+              label={t.settings.alertVolume}
+              value={settings.alertVolume}
+              onChange={(v) => updateSettings({ alertVolume: v })}
+            />
 
             {settings.alertSound === 'custom' && (
               <div className="flex flex-wrap items-center gap-2">

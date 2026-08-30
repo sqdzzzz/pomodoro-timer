@@ -22,6 +22,7 @@ const DEFAULT_SETTINGS: TimerSettings = {
   bgmEnabled: false,
   bgmVolume: 0.6,
   alertSound: 'default',
+  alertVolume: 0.8,
   uiOpacity: 1,
 }
 
@@ -48,7 +49,7 @@ function playAlert(settings: TimerSettings): void {
   if (!settings.soundEnabled) return
   const preset = PRESET_ALERT_SOUNDS[settings.alertSound]
   if (preset) {
-    playNotificationSound(preset)
+    playNotificationSound(preset, settings.alertVolume)
     return
   }
   if (settings.alertSound === 'custom') {
@@ -56,16 +57,16 @@ function playAlert(settings: TimerSettings): void {
       .then((blob) => {
         if (blob) {
           const url = URL.createObjectURL(blob)
-          playNotificationSound(url)
+          playNotificationSound(url, settings.alertVolume)
           window.setTimeout(() => URL.revokeObjectURL(url), 10000)
         } else {
-          playNotificationSound()
+          playNotificationSound(undefined, settings.alertVolume)
         }
       })
-      .catch(() => playNotificationSound())
+      .catch(() => playNotificationSound(undefined, settings.alertVolume))
     return
   }
-  playNotificationSound()
+  playNotificationSound(undefined, settings.alertVolume)
 }
 
 export const usePomodoroStore = create<PomodoroStore>()(

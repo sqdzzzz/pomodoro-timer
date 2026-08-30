@@ -53,6 +53,7 @@ export interface TranslationDict {
     bgm: string
     bgmVolume: string
     alertSound: string
+    alertVolume: string
     alertDefault: string
     alertNailong: string
     alertGugugaga: string
@@ -140,6 +141,7 @@ export const translations: Record<Language, TranslationDict> = {
       bgm: '背景音乐',
       bgmVolume: 'BGM 音量',
       alertSound: '提醒音',
+      alertVolume: '提醒音音量',
       alertDefault: '默认',
       alertNailong: '奶龙大笑',
       alertGugugaga: '咕咕嘎嘎',
@@ -225,6 +227,7 @@ export const translations: Record<Language, TranslationDict> = {
       bgm: 'Background music',
       bgmVolume: 'BGM volume',
       alertSound: 'Alert sound',
+      alertVolume: 'Alert volume',
       alertDefault: 'Default',
       alertNailong: 'Nailong laugh',
       alertGugugaga: 'Gugu Gaga',
