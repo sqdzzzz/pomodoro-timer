@@ -65,6 +65,12 @@ function VolumeSlider({
   value: number
   onChange: (v: number) => void
 }) {
+  const pct = Math.min(100, Math.max(0, value * 100))
+  // 用 linear-gradient 直接给轨道上进度色：左侧番茄色到 value，右侧灰色
+  // 比 ::-webkit-slider-runnable-track 更稳，所有现代浏览器一致
+  const trackStyle: React.CSSProperties = {
+    background: `linear-gradient(to right, #ff6b6b 0%, #ff6b6b ${pct}%, rgba(148,163,184,0.35) ${pct}%, rgba(148,163,184,0.35) 100%)`,
+  }
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
@@ -80,8 +86,10 @@ function VolumeSlider({
         step={0.05}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-[var(--border-color)]"
-        style={{ accentColor: '#ff6b6b' }}
+        aria-label={label}
+        aria-valuetext={`${Math.round(value * 100)}%`}
+        className="volume-slider w-full h-2 rounded-lg appearance-none cursor-pointer"
+        style={trackStyle}
       />
     </div>
   )
