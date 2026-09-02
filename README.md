@@ -7,6 +7,27 @@
 ![TypeScript](https://img.shields.io/badge/typescript-5.2-3178C6?logo=typescript)
 ![Vite](https://img.shields.io/badge/vite-5.3-646CFF?logo=vite)
 
+## 快速开始
+
+### 方式一：离线使用（推荐，无需安装任何东西）
+
+下载本仓库压缩包（Code → Download ZIP）并解压后，直接**双击 `dist/index.html`** 即可使用完整功能，不需要安装 Node.js 或任何依赖。
+
+> 注意：`dist/audio/` 和 `dist/backgrounds/` 文件夹必须和 `index.html` 在同一目录下（解压后默认就是），否则背景视频和提醒音不响。
+
+### 方式二：在线版
+
+直接访问 GitHub Pages 部署的地址：https://sqdzzzz.github.io/pomodoro-timer/
+
+### 方式三：本地开发
+
+双击 `start.bat`（需要已安装 [Node.js](https://nodejs.org/)），或在项目目录执行：
+
+```bash
+npm install
+npm run dev
+```
+
 ## 功能特性
 
 - **经典番茄工作流**：25 分钟专注、5 分钟短休息、15 分钟长休息
